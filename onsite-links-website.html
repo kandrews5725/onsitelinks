@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnSite Links — No dead zones. No down time.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#2B2B2B;
+    --charcoal-soft:#3d3d3d;
+    --blue:#114F92;
+    --blue-deep:#0c3a6e;
+    --blue-pale:#e8f0fa;
+    --amber:#f0a020;
+    --amber-deep:#c97e0e;
+    --paper:#f7f5f0;
+    --paper-dim:#ece9e1;
+    --line:#d9d5cb;
+    --white:#ffffff;
+    --ink-soft:#6b6862;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--paper);
+    color:var(--charcoal);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--charcoal);
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  section{padding:96px 0;}
+  @media (max-width:700px){
+    section{padding:64px 0;}
+    .wrap{padding:0 20px;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(247,245,240,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    max-width:1180px;margin:0 auto;padding:0 32px;
+    height:76px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo-mark{height:30px;display:flex;align-items:center;}
+  .logo-mark img{height:30px;width:auto;}
+  .nav-links{display:flex;gap:36px;align-items:center;}
+  .nav-links a{
+    font-size:14.5px;font-weight:500;color:var(--charcoal-soft);
+    transition:color .15s;
+  }
+  .nav-links a:hover{color:var(--blue);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;
+    padding:11px 22px;border-radius:4px;
+    border:1.5px solid transparent;
+    cursor:pointer;transition:all .15s;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-primary:hover{background:var(--blue-deep);}
+  .btn-outline{background:transparent;border-color:var(--charcoal);color:var(--charcoal);}
+  .btn-outline:hover{background:var(--charcoal);color:#fff;}
+  .btn-amber{background:var(--amber);color:var(--charcoal);}
+  .btn-amber:hover{background:var(--amber-deep);color:#fff;}
+  .nav-cta{display:flex;align-items:center;gap:14px;}
+  .mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;}
+  .mobile-toggle span{display:block;width:24px;height:2px;background:var(--charcoal);margin:5px 0;}
+
+  @media (max-width:880px){
+    .nav-links{display:none;}
+    .mobile-toggle{display:block;}
+  }
+
+  .mobile-menu{
+    display:none;position:fixed;top:76px;left:0;right:0;bottom:0;
+    background:var(--paper);z-index:99;padding:32px;
+    border-top:1px solid var(--line);
+  }
+  .mobile-menu.open{display:flex;flex-direction:column;gap:28px;}
+  .mobile-menu a{font-size:20px;font-weight:600;font-family:'Space Grotesk',sans-serif;}
+  .mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;}
+
+  /* ---------- HERO (image) ---------- */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;
+    letter-spacing:0.04em;color:var(--blue-deep);
+    background:var(--blue-pale);
+    padding:6px 12px;border-radius:3px;margin-bottom:24px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+
+  .hero-img{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;          /* matches the 16:9 artwork — fills full viewport width */
+    overflow:hidden;
+    background:#16191d;
+  }
+  .hero-scene{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;object-position:center;
+    display:block;
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(100deg, rgba(18,22,27,0.16) 0%, rgba(18,22,27,0.00) 30%, rgba(16,20,26,0.50) 60%, rgba(13,16,21,0.84) 100%),
+      linear-gradient(180deg, rgba(13,16,21,0.28) 0%, rgba(13,16,21,0) 22%, rgba(13,16,21,0) 72%, rgba(13,16,21,0.40) 100%);
+  }
+  .hero-img-inner{
+    position:absolute;inset:0;
+    max-width:1180px;margin:0 auto;padding:0 32px;
+  }
+  .hero-copy{
+    position:absolute;right:32px;top:50%;
+    width:46%;max-width:470px;
+    opacity:0;transform:translateY(-50%) translateX(60px);
+    animation:heroCopyIn .85s cubic-bezier(.18,.7,.2,1) .35s both;
+  }
+  .hero-copy h1{
+    font-size:54px;line-height:1.03;letter-spacing:-0.02em;margin-bottom:20px;color:#fff;
+  }
+  .hero-copy h1 .accent{color:#6fb0ec;}
+  .hero-copy .lede{
+    font-size:18px;color:rgba(255,255,255,0.86);margin-bottom:34px;max-width:440px;
+  }
+  .hero-ctas{display:flex;gap:14px;margin-bottom:34px;flex-wrap:wrap;}
+  .hero-ctas .btn{padding:14px 26px;font-size:15px;}
+  .btn-hero-ghost{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.45);color:#fff;}
+  .btn-hero-ghost:hover{background:rgba(255,255,255,0.18);}
+  .hero-stats{display:flex;gap:30px;flex-wrap:wrap;}
+  .hero-stat .num{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:600;color:#fff;}
+  .hero-stat .label{font-size:12.5px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+  @keyframes heroCopyIn{to{opacity:1;transform:translateY(-50%) translateX(0);}}
+
+  @media (max-width:900px){
+    /* stack: full 16:9 scene on top, copy below on a dark panel (no cropping) */
+    .hero-img{aspect-ratio:auto;max-height:none;display:block;}
+    .hero-scene{position:static;width:100%;height:auto;}
+    .hero-scrim{display:none;}
+    .hero-img-inner{
+      position:static;max-width:none;
+      padding:36px 24px 48px;text-align:center;background:#16191d;
+    }
+    .hero-copy{
+      position:static;width:100%;max-width:520px;margin:0 auto;transform:none;
+      animation:heroCopyInM .8s ease .15s both;
+    }
+    .hero-copy h1{font-size:34px;}
+    .hero-copy .lede{font-size:16px;margin-inline:auto;}
+    .hero-ctas{justify-content:center;}
+    .hero-stats{justify-content:center;}
+  }
+  @keyframes heroCopyInM{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-copy{animation:none;opacity:1;transform:translateY(-50%);}
+  }
+  @media (max-width:900px) and (prefers-reduced-motion: reduce){
+    .hero-copy{transform:none;}
+  }
+
+  /* ---------- LOGO STRIP ---------- */
+  /* ---------- INDUSTRIES SERVED ---------- */
+  .industries{
+    padding:72px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:var(--paper-dim);
+  }
+  .industries-head{text-align:center;max-width:620px;margin:0 auto 44px;}
+  .industries-head .eyebrow{margin-bottom:16px;}
+  .industries-head h2{font-size:28px;margin-bottom:10px;}
+  .industries-head p{font-size:15.5px;color:var(--charcoal-soft);}
+  .industries-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:16px;
+  }
+  .industry-card{
+    background:var(--white);border:1px solid var(--line);border-radius:10px;
+    padding:22px 20px;display:flex;gap:14px;align-items:flex-start;
+  }
+  .industry-icon{
+    width:38px;height:38px;border-radius:8px;background:var(--blue-pale);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .industry-card h3{font-size:15px;margin-bottom:4px;color:var(--charcoal);}
+  .industry-card p{font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .industries-foot{
+    text-align:center;margin-top:32px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-soft);
+    letter-spacing:0.03em;
+  }
+
+  @media (max-width:620px){
+    .industries-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- SECTION HEAD (shared) ---------- */
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head .eyebrow{margin-bottom:18px;}
+  .section-head h2{font-size:36px;line-height:1.15;margin-bottom:14px;}
+  .section-head p{font-size:16.5px;color:var(--charcoal-soft);}
+
+  /* ---------- HOW IT WORKS ---------- */
+  .how{background:var(--charcoal);color:#fff;}
+  .how .section-head h2{color:#fff;}
+  .how .section-head p{color:#b8b5b0;}
+  .how .eyebrow{background:rgba(17,79,146,0.25);color:#9bc0e8;}
+  .how .eyebrow .dot{background:var(--amber);}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#444;border-radius:10px;overflow:hidden;}
+  .steps-4{grid-template-columns:repeat(4,1fr);}
+  .step{background:#232323;padding:36px 30px;}
+  .step-index{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber);
+    margin-bottom:18px;display:block;letter-spacing:0.02em;
+  }
+  .step h3{color:#fff;font-size:18px;margin-bottom:10px;}
+  .step p{color:#b0aca7;font-size:14px;}
+  .step p code{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#9bc0e8;
+    background:rgba(17,79,146,0.22);padding:2px 6px;border-radius:3px;
+  }
+  .step-icon{
+    width:44px;height:44px;border-radius:8px;background:rgba(17,79,146,0.3);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+  }
+
+  @media (max-width:980px){
+    .steps-4{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:880px){
+    .steps{grid-template-columns:1fr;}
+    .steps-4{grid-template-columns:1fr;}
+  }
+
+  /* ---------- PRODUCT / SPEC ---------- */
+  .product-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:56px;align-items:center;}
+  .node-photo{
+    position:relative;border-radius:14px;overflow:hidden;
+    background:linear-gradient(160deg,#eef0f2,#dfe2e6);
+    border:1px solid var(--line);
+    box-shadow:0 18px 40px rgba(20,30,45,0.12);
+  }
+  .node-photo img{width:100%;height:auto;display:block;}
+  .photo-chip{
+    position:absolute;left:16px;bottom:16px;
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;
+    color:#fff;background:rgba(20,24,30,0.66);backdrop-filter:blur(4px);
+    padding:7px 12px;border-radius:5px;
+  }
+  .photo-chip .chip-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 3px rgba(240,160,32,0.25);}
+  .product-features{display:flex;flex-direction:column;gap:14px;margin-top:26px;}
+  .pfeat{display:flex;gap:14px;align-items:center;}
+  .pfeat-num{
+    font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--blue-deep);
+    background:var(--blue-pale);min-width:34px;height:34px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .pfeat span:last-child{font-size:14.5px;color:var(--charcoal-soft);}
+  .spec-table{width:100%;border-collapse:collapse;}
+  .spec-table tr{border-bottom:1px solid var(--line);}
+  .spec-table tr:first-child{border-top:1px solid var(--line);}
+  .spec-table td{padding:16px 0;font-size:14.5px;}
+  .spec-table td:first-child{color:var(--ink-soft);width:42%;}
+  .spec-table td:last-child{font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right;}
+  .product-badges{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;}
+  .spec-note{font-size:12.5px;color:var(--ink-soft);margin-top:18px;font-style:italic;}
+  .badge{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    padding:7px 12px;border-radius:4px;background:var(--blue-pale);color:var(--blue-deep);
+  }
+
+  @media (max-width:880px){
+    .product-grid{grid-template-columns:1fr;gap:36px;}
+    .node-photo{max-width:420px;margin:0 auto;}
+  }
+
+  /* ---------- COVERAGE / FLOOR PLAN ---------- */
+  .coverage{background:var(--paper-dim);}
+  .coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+  .floor-card{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:28px;}
+  .floor-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .floor-card-head h4{font-size:15px;}
+  .floor-card-head .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 9px;border-radius:3px;
+  }
+  .tag.bad{background:#fbe9e7;color:#a3382f;}
+  .tag.good{background:var(--blue-pale);color:var(--blue-deep);}
+
+  @media (max-width:880px){
+    .coverage-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- SITE SURVEY ---------- */
+  .survey-card{
+    background:var(--white);border:1px solid var(--line);border-radius:12px;
+    padding:48px;display:grid;grid-template-columns:1.3fr 0.9fr;gap:48px;align-items:center;
+  }
+  .survey-content h2{font-size:30px;margin-bottom:14px;}
+  .survey-content p{font-size:15.5px;color:var(--charcoal-soft);margin-bottom:22px;max-width:520px;}
+  .survey-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:28px;}
+  .survey-list li{font-size:14.5px;color:var(--charcoal-soft);display:flex;gap:10px;align-items:flex-start;}
+  .survey-list li::before{content:"";min-width:6px;height:6px;border-radius:50%;background:var(--amber);margin-top:7px;flex-shrink:0;}
+  .survey-visual{background:var(--paper-dim);border-radius:10px;padding:16px;}
+
+  @media (max-width:880px){
+    .survey-card{grid-template-columns:1fr;padding:32px;gap:28px;}
+    .survey-visual{order:-1;max-width:280px;margin:0 auto;}
+  }
+
+  /* ---------- PRICING ---------- */
+  .price-main{
+    background:var(--white);border:1px solid var(--line);border-radius:12px;
+    padding:48px;display:grid;grid-template-columns:1.2fr 1fr;gap:56px;
+  }
+  .pamount-lg{
+    font-family:'JetBrains Mono',monospace;font-weight:600;font-size:48px;
+    color:var(--charcoal);margin-bottom:16px;line-height:1;
+  }
+  .pamount-lg .curr{font-size:28px;color:var(--ink-soft);vertical-align:top;margin-right:2px;}
+  .pamount-lg .punit-lg{
+    font-family:'Inter',sans-serif;font-size:15px;font-weight:500;color:var(--ink-soft);
+    margin-left:8px;
+  }
+  .price-sub{font-size:15px;color:var(--charcoal-soft);max-width:440px;margin-bottom:26px;}
+  .price-includes{display:flex;flex-direction:column;gap:12px;margin-bottom:30px;}
+  .pinc-row{font-size:14.5px;color:var(--charcoal-soft);display:flex;gap:10px;align-items:flex-start;}
+  .pdot{min-width:6px;height:6px;border-radius:50%;background:var(--blue);margin-top:7px;flex-shrink:0;display:inline-block;}
+  .price-main-right{
+    border-left:1px solid var(--line);padding-left:40px;
+  }
+  .price-main-right h4{font-size:14.5px;margin-bottom:18px;}
+  .price-notes{display:flex;flex-direction:column;gap:16px;}
+  .price-note-row{
+    font-size:13.5px;color:var(--ink-soft);line-height:1.5;
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .price-note-row .note-icon{
+    width:22px;height:22px;border-radius:6px;background:var(--paper-dim);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+  }
+  .price-note-row .note-icon svg{width:12px;height:12px;}
+
+  @media (max-width:880px){
+    .price-main{grid-template-columns:1fr;padding:32px;gap:32px;}
+    .price-main-right{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:28px;}
+  }
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{
+    background:var(--blue);color:#fff;text-align:center;padding:88px 0;
+  }
+  .cta-band h2{color:#fff;font-size:38px;margin-bottom:16px;}
+  .cta-band p{color:#cfe0f3;font-size:17px;margin-bottom:36px;max-width:520px;margin-inline:auto;}
+  .cta-band .btn-amber{padding:15px 30px;font-size:15.5px;}
+  .cta-band .btn-ghost{
+    background:transparent;border:1.5px solid rgba(255,255,255,0.4);color:#fff;
+  }
+  .cta-band .btn-ghost:hover{background:rgba(255,255,255,0.12);}
+  .cta-band-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--charcoal);color:#a8a4a0;padding:64px 0 32px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:48px;}
+  .footer-brand img{height:26px;margin-bottom:14px;filter:brightness(0) invert(1);}
+  .footer-brand p{font-size:14px;max-width:260px;color:#8f8c87;}
+  .footer-col h5{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:#6f6c68;
+    letter-spacing:0.04em;margin-bottom:16px;text-transform:uppercase;
+  }
+  .footer-col a{display:block;font-size:14px;color:#c4c0bb;margin-bottom:11px;}
+  .footer-col a:hover{color:#fff;}
+  .footer-col span{display:block;font-size:14px;color:#c4c0bb;margin-bottom:11px;}
+  .footer-bottom{
+    border-top:1px solid #444;padding-top:24px;display:flex;justify-content:space-between;
+    font-size:13px;color:#6f6c68;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:880px){
+    .footer-grid{grid-template-columns:1fr 1fr;gap:32px;}
+  }
+  @media (max-width:560px){
+    .footer-grid{grid-template-columns:1fr;}
+  }
+
+  /* utility */
+  .fade-up{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .fade-up.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .fade-up{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#top" class="logo-mark"><img src="logo.png" alt="OnSite Links"></a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#product">The hardware</a>
+      <a href="#coverage">Coverage</a>
+      <a href="#survey">Free consultation</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary">Get a quote</a>
+    </div>
+    <button class="mobile-toggle" onclick="document.querySelector('.mobile-menu').classList.toggle('open')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="mobile-menu">
+  <a href="#how" onclick="document.querySelector('.mobile-menu').classList.remove('open')">How it works</a>
+  <a href="#product" onclick="document.querySelector('.mobile-menu').classList.remove('open')">The hardware</a>
+  <a href="#coverage" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Coverage</a>
+  <a href="#survey" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Free consultation</a>
+  <a href="#pricing" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Pricing</a>
+  <a class="btn btn-primary" href="#contact" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Get a quote</a>
+</div>
+
+<section class="hero-img" id="top">
+  <img class="hero-scene" src="hero_scene.jpg" alt="OnSite Links wireless node on a tripod, deployed on an active construction site">
+  <div class="hero-scrim"></div>
+  <div class="hero-img-inner">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot"></span>Deployable wireless nodes for remote sites</div>
+      <h1>No dead zones.<br><span class="accent">No down time.</span></h1>
+      <p class="lede">Take your network further with temporary, deployable wireless nodes — rented by the month, online in minutes.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Request a quote</a>
+        <a href="#how" class="btn btn-hero-ghost">See how it works</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">3,000 ft</div><div class="label">range, open air</div></div>
+        <div class="hero-stat"><div class="num">Pre-paired</div><div class="label">no configuration needed</div></div>
+        <div class="hero-stat"><div class="num">Monthly</div><div class="label">per-node rental</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="industries">
+  <div class="wrap">
+    <div class="industries-head">
+      <div class="eyebrow"><span class="dot"></span>Where it's used</div>
+      <h2>Built for teams where wifi doesn't reach</h2>
+      <p>Standard wifi has trouble getting through concrete, steel, and rock. OnSite Links improves that signal penetration by up to 5x.</p>
+    </div>
+    <div class="industries-grid">
+      <div class="industry-card fade-up">
+        <div class="industry-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 9h16M4 14h16M9 21v-4h6v4M8 6h1M11 6h1M14 6h1"/></svg>
+        </div>
+        <div>
+          <h3>Construction &amp; General Contracting</h3>
+          <p>Concrete, steel, and a floor plan that keeps changing block signal as the build progresses.</p>
+        </div>
+      </div>
+      <div class="industry-card fade-up">
+        <div class="industry-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="1.8"><path d="M12 2v6M12 22v-6M4.93 4.93l4.24 4.24M19.07 19.07l-4.24-4.24M4.93 19.07l4.24-4.24M19.07 4.93l-4.24 4.24"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div>
+          <h3>Mining &amp; Underground Operations</h3>
+          <p>Rock and earth block standard wifi where crews still need comms.</p>
+        </div>
+      </div>
+      <div class="industry-card fade-up">
+        <div class="industry-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="1.8"><path d="M2 21V13a10 10 0 0120 0v8"/><path d="M2 21h20"/></svg>
+        </div>
+        <div>
+          <h3>Tunneling &amp; Underground Utilities</h3>
+          <p>New tunnels and utility bores have no infrastructure and dense rock overhead.</p>
+        </div>
+      </div>
+      <div class="industry-card fade-up">
+        <div class="industry-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="1.8"><path d="M2 17l2 4h16l2-4z"/><path d="M5 17V9h14v8"/><rect x="14" y="5" width="3" height="4"/></svg>
+        </div>
+        <div>
+          <h3>Marine &amp; Shipbuilding</h3>
+          <p>A steel hull under construction has no network until the ship is in service.</p>
+        </div>
+      </div>
+    </div>
+    <div class="industries-foot">SHIPPED NATIONWIDE — RENTED BY THE MONTH</div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span>How it works</div>
+      <h2>We configure it. You power it on.</h2>
+      <p>Every kit ships pre-configured and ready — no app, no admin login, no IT visit to set it up.</p>
+    </div>
+    <div class="steps steps-4">
+      <div class="step fade-up">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9bc0e8" stroke-width="1.8"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9 4v3M12 4v3M15 4v3M9 17v3M12 17v3M15 17v3M4 9h3M4 12h3M4 15h3M17 9h3M17 12h3M17 15h3"/></svg>
+        </div>
+        <span class="step-index">01 — BUILT BEFORE IT SHIPS</span>
+        <h3>We pair every node before it leaves us</h3>
+        <p>One node ships as primary, the rest as extenders, all paired and locked to your kit's own network. There's nothing to configure when it arrives.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9bc0e8" stroke-width="1.8"><path d="M12 21V9"/><path d="M7 13l5-5 5 5"/><rect x="4" y="3" width="16" height="4" rx="1"/></svg>
+        </div>
+        <span class="step-index">02 — CONNECT TO NETWORK</span>
+        <h3>The primary node plugs into your gateway</h3>
+        <p>It works with whatever's already on site — fiber, cellular, satellite, or a hardline. That's the only wired connection in the whole setup.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9bc0e8" stroke-width="1.8"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        </div>
+        <span class="step-index">03 — PLACE WHERE SIGNAL DROPS</span>
+        <h3>Set nodes wherever you have dead spots</h3>
+        <p>Drop a node anywhere coverage gets weak — a deep corner, a stairwell, a lower floor. Power it on — battery or plugged in — and it joins the network automatically.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9bc0e8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 Q12 3 21 9"/><path d="M6.5 12.5 Q12 8 17.5 12.5"/><path d="M10 16 Q12 14.3 14 16"/><circle cx="12" cy="19.5" r="1" fill="#9bc0e8" stroke="none"/></svg>
+        </div>
+        <span class="step-index">04 — BACK ONLINE</span>
+        <h3>Crew connects like normal wifi</h3>
+        <p>No special app, login, or device setup — your team gets back to project software, plans, comms, and cameras wherever a node reaches.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="product" id="product">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span>The hardware</div>
+      <h2>Built for demanding environments.</h2>
+      <p>Every node is housed in a rugged enclosure designed for active jobsite conditions, not a desk or a server room.</p>
+    </div>
+    <div class="product-grid">
+      <div class="node-photo fade-up">
+        <img src="product.jpg" alt="OnSite Links wireless node — rugged black enclosure with dual antennas and carry handle, mounted on a stand">
+      </div>
+      <div class="fade-up">
+        <table class="spec-table">
+          <tr><td>Radio standard</td><td class="mono">IEEE 802.11ah (HaLow)</td></tr>
+          <tr><td>Frequency</td><td class="mono">900 MHz ISM band</td></tr>
+          <tr><td>Open-air range</td><td class="mono">up to 3,000 ft</td></tr>
+          <tr><td>Typical throughput</td><td class="mono">~25 Mbps*</td></tr>
+          <tr><td>Battery life</td><td class="mono">8–12 hrs per charge*</td></tr>
+          <tr><td>Enclosure</td><td class="mono">rugged, field-deployable*</td></tr>
+          <tr><td>Network setup</td><td class="mono">pre-paired, power-on ready</td></tr>
+          <tr><td>Uplink</td><td class="mono">your existing network</td></tr>
+        </table>
+        <div class="product-features">
+          <div class="pfeat"><span class="pfeat-num">×2</span><span>High-gain antennas for max reach through structure</span></div>
+          <div class="pfeat"><span class="pfeat-num">↥</span><span>Carry handle — grab it, move it, set it anywhere</span></div>
+          <div class="pfeat"><span class="pfeat-num">⌖</span><span>Stand-mountable for height and stability on site</span></div>
+        </div>
+        <div class="product-badges">
+          <span class="badge">No configuration</span>
+          <span class="badge">No app or login</span>
+          <span class="badge">No site visit to deploy</span>
+        </div>
+        <p class="spec-note">*Early estimate, pending final field testing — full spec sheet coming as we finalize the production unit. Product shown is a design render.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="coverage" id="coverage">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span>Coverage</div>
+      <h2>One node adds coverage where none existed before.</h2>
+      <p>Dense materials create dead zones all around your site. A node placed in the gap fills it back in — here's the idea.</p>
+    </div>
+    <div class="coverage-grid">
+      <div class="floor-card fade-up">
+        <div class="floor-card-head">
+          <h4>Without a node</h4>
+          <span class="tag bad">Dead zone past the core</span>
+        </div>
+        <svg width="100%" height="160" viewBox="0 0 400 160">
+          <rect x="0" y="0" width="400" height="160" fill="#f1efe8" rx="4"/>
+          <rect x="20" y="20" width="360" height="120" fill="none" stroke="#cfcabe" stroke-width="2"/>
+          <line x1="140" y1="20" x2="140" y2="140" stroke="#cfcabe" stroke-width="2"/>
+          <line x1="260" y1="20" x2="260" y2="140" stroke="#cfcabe" stroke-width="2"/>
+          <rect x="73" y="73" width="14" height="14" rx="2" fill="#000000"/>
+	  <circle cx="80" cy="80" r="50" fill="#114F92" opacity="0.18"/>
+          <circle cx="200" cy="80" r="50" fill="#c4504a" opacity="0.12"/>
+          <circle cx="320" cy="80" r="50" fill="#c4504a" opacity="0.12"/>
+        </svg>
+      </div>
+      <div class="floor-card fade-up">
+        <div class="floor-card-head">
+          <h4>With nodes added</h4>
+          <span class="tag good">Coverage restored</span>
+        </div>
+        <svg width="100%" height="160" viewBox="0 0 400 160">
+          <rect x="0" y="0" width="400" height="160" fill="#f1efe8" rx="4"/>
+          <rect x="20" y="20" width="360" height="120" fill="none" stroke="#cfcabe" stroke-width="2"/>
+          <line x1="140" y1="20" x2="140" y2="140" stroke="#cfcabe" stroke-width="2"/>
+          <line x1="260" y1="20" x2="260" y2="140" stroke="#cfcabe" stroke-width="2"/>
+          <rect x="73" y="73" width="14" height="14" rx="2" fill="#000000"/>
+	  <circle cx="80" cy="80" r="50" fill="#114F92" opacity="0.18"/>  
+	  <circle cx="200" cy="80" r="50" fill="#114F92" opacity="0.18"/>
+          <circle cx="200" cy="80" r="6" fill="#114F92"/>
+          <circle cx="320" cy="80" r="50" fill="#114F92" opacity="0.18"/>
+          <circle cx="320" cy="80" r="6" fill="#114F92"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="survey" id="survey">
+  <div class="wrap">
+    <div class="survey-card fade-up">
+      <div class="survey-content">
+        <div class="eyebrow"><span class="dot"></span>Free consultation, no obligation</div>
+        <h2>Not sure how many nodes you need?</h2>
+        <p>Send us what you've got — plans, drawings, or basic dimensions — and we'll recommend how many nodes your site is likely to need, free and with no commitment.</p>
+        <ul class="survey-list">
+          <li>Share plans, drawings, dimensions, or square footage for the site</li>
+          <li>We review the layout and scale of the space</li>
+          <li>You get a recommended node count back within 2 business days</li>
+        </ul>
+        <a href="mailto:info@onsitelinks.com?subject=Free%20site%20survey%20request" class="btn btn-primary">Request a free online site survey</a>
+      </div>
+      <div class="survey-visual">
+        <svg width="100%" height="100%" viewBox="0 0 260 230">
+          <rect x="10" y="10" width="240" height="200" fill="none" stroke="#cfcabe" stroke-width="2" rx="4"/>
+          <line x1="130" y1="10" x2="130" y2="210" stroke="#cfcabe" stroke-width="1.5"/>
+          <line x1="10" y1="110" x2="250" y2="110" stroke="#cfcabe" stroke-width="1.5"/>
+          <rect x="15" y="15" width="14" height="14" rx="2" fill="#000000"/>
+	  <line x1="25" y1="25" x2="70" y2="60" stroke="#000000" stroke-width="1.5"/>
+	  <circle cx="70" cy="60" r="40" fill="#114F92" opacity="0.16"/>
+          <circle cx="70" cy="60" r="6" fill="#114F92"/>
+          <circle cx="190" cy="60" r="40" fill="#114F92" opacity="0.16"/>
+          <circle cx="190" cy="60" r="6" fill="#114F92"/>
+          <circle cx="70" cy="160" r="40" fill="#114F92" opacity="0.16"/>
+          <circle cx="70" cy="160" r="6" fill="#114F92"/>
+	  <circle cx="190" cy="160" r="40" fill="#114F92" opacity="0.16"/>
+          <circle cx="190" cy="160" r="6" fill="#114F92"/>
+          <text x="130" y="222" text-anchor="middle" fill="#000000" font-family="JetBrains Mono, monospace" font-size="9">■ YOUR GATEWAY &#160;&#160;&#160;&#8226; SUGGESTED: 4 NODES</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span>Rental pricing</div>
+      <h2>Simple, per-node pricing.</h2>
+      <p>One price per node, billed monthly. Rent only as many as your site needs.</p>
+    </div>
+
+    <div class="price-main fade-up">
+      <div class="price-main-left">
+        <div class="pamount-lg"><span class="curr">$</span>149<span class="punit-lg">/ node / month</span></div>
+        <p class="price-sub">2-node minimum per site — one primary node and one extender. No monthly minimum — add nodes anytime as coverage needs grow, remove them just as easily.</p>
+        <div class="price-includes">
+          <div class="pinc-row"><span class="pdot"></span>No monthly minimum — cancel anytime</div>
+          <div class="pinc-row"><span class="pdot"></span>Nodes pre-paired and configured before shipping</div>
+          <div class="pinc-row"><span class="pdot"></span>Free online site survey before your gear ships</div>
+          <div class="pinc-row"><span class="pdot"></span>Swap a failed node anytime, no fee</div>
+        </div>
+        <a href="#contact" class="btn btn-primary">Request a quote</a>
+      </div>
+      <div class="price-main-right">
+        <h4>Good to know, going in</h4>
+        <div class="price-notes">
+          <div class="price-note-row">
+            <span class="note-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7M3 7l9 4M21 7l-9 4v10"/></svg></span>
+            <span>Shipping to and from your site is billed separately at cost.</span>
+          </div>
+          <div class="price-note-row">
+            <span class="note-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/></svg></span>
+            <span>Optional damage protection available per node — waives repair cost for normal jobsite wear and accidental drops.</span>
+          </div>
+          <div class="price-note-row">
+            <span class="note-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#114F92" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+            <span>Final shipping and protection pricing will be confirmed when we open for rentals.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="contact">
+  <div class="wrap">
+    <h2>No dead zones. No down time.</h2>
+    <p>Tell us about your site — we'll answer your questions, walk through how it works, and help you figure out if it's the right fit.</p>
+    <div class="cta-band-btns">
+      <a href="mailto:info@onsitelinks.com?subject=Quote%20request" class="btn btn-amber">Request a quote</a>
+      <a href="tel:+12072138190" class="btn btn-ghost">Call (207) 213-8190</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="logo.png" alt="OnSite Links">
+        <p>Take your network further — temporary, deployable wireless nodes, rented by the month.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <a href="#how">How it works</a>
+        <a href="#product">The hardware</a>
+        <a href="#coverage">Coverage</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="tel:+12072138190">(207) 213-8190</a>
+        <a href="mailto:info@onsitelinks.com">info@onsitelinks.com</a>
+      </div>
+      <div class="footer-col">
+        <h5>Service area</h5>
+        <span>Nationwide</span>
+        <span>Shipped to any site</span>
+        <span>Based in Maine</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 OnSite Links. All rights reserved.</span>
+      <span>No dead zones. No down time.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // fade-up on scroll
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  fadeEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
